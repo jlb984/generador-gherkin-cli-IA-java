@@ -23,6 +23,8 @@ public class Main {
             String descripcion = cmd.getOptionValue("descripcion");
 
             String contexto = GherkinGenerator.leerUltimosEscenarios(featureFolder);
+            System.out.println("\nContexto de escenarios existentes:\n");
+            System.out.println(contexto);
             String resultado = GherkinGenerator.generarEscenario(descripcion, contexto);
 
             System.out.println("\nEscenario generado:\n");
