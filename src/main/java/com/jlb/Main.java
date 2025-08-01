@@ -2,10 +2,6 @@ package com.jlb;
 
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.stream.Collectors;
-
 public class Main {
     public static void main(String[] args) {
         Options options = new Options();
@@ -26,20 +22,13 @@ public class Main {
             String featureFolder = cmd.getOptionValue("feature");
             String descripcion = cmd.getOptionValue("descripcion");
 
-            String contexto = Files.walk(Paths.get(featureFolder))
-                    .filter(Files::isRegularFile)
-                    .filter(p -> p.toString().endsWith(".feature"))
-                    .map(p -> {
-                        try {
-                            return Files.readString(p);
-                        } catch (IOException e) {
-                            return "";
-                        }
-                    })
-                    .collect(Collectors.joining("\n\n"));
-
+            String contexto = GherkinGenerator.leerUltimosEscenarios(featureFolder);
             String resultado = GherkinGenerator.generarEscenario(descripcion, contexto);
-            System.out.println("Escenario generado:\n\n" + resultado);
+
+            System.out.println("\nEscenario generado:\n");
+            System.out.println(resultado);
+
+            GherkinGenerator.guardarEscenario(resultado);
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
