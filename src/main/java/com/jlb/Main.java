@@ -16,7 +16,7 @@ public class Main {
 
         try {
             CommandLine cmd = parser.parse(options, args);
-            if (cmd.hasOption("h") || !cmd.hasOption("f") || !cmd.hasOption("d") || !cmd.hasOption("n")) {
+            if (cmd.hasOption("h") || !cmd.hasOption("f") || !cmd.hasOption("d")) {
                 formatter.printHelp("gherkin-generator", options);
                 return;
             }
@@ -26,7 +26,12 @@ public class Main {
             String nombreFeature = cmd.getOptionValue("funcionalidad");
             String proveedor = cmd.getOptionValue("provider", "openai").toLowerCase();
 
-            String contexto = GherkinGenerator.leerEscenariosPorNombre(featureFolder, nombreFeature);
+            String contexto;
+            if (nombreFeature != null && !nombreFeature.isBlank()) {
+                contexto = GherkinGenerator.leerEscenariosPorNombre(featureFolder, nombreFeature);
+            } else {
+                contexto = GherkinGenerator.leerUltimosEscenarios(featureFolder);
+            }
 
             IAProvider ia;
             if (proveedor.equals("gemini")) {
