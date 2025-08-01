@@ -5,12 +5,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,7 +21,7 @@ import java.util.stream.Stream;
 public class GherkinGenerator {
     private static final String API_KEY = System.getenv("OPENAI_API_KEY");
     private static final String ENDPOINT = "https://api.openai.com/v1/chat/completions";
-    private static final int MAX_SCENARIOS = 5;
+    private static final int MAX_SCENARIOS = 6;
     private static final String DEFAULT_OUTPUT_FOLDER = "generated-features";
 
     public static String generarEscenario(String descripcionNueva, String contextoGherkin) throws IOException {
@@ -65,8 +68,17 @@ public class GherkinGenerator {
                     .flatMap(p -> {
                         try {
                             String contenido = Files.readString(p);
-                            return Stream.of(contenido.split("(?=Escenario: )"))
-                                    .filter(s -> s.trim().startsWith("Escenario:"));
+                            String[] bloques = contenido.split("(\r?\n){2,}");
+                            List<String> escenariosEnArchivo = new ArrayList<>();
+                            for (String bloque : bloques) {
+                                String[] lineas = bloque.strip().split("\\R");
+                                if (lineas.length >= 2 && lineas[0].trim().startsWith("@") && lineas[1].trim().startsWith("Escenario:")) {
+                                    escenariosEnArchivo.add(bloque.strip());
+                                } else if (lineas.length >= 1 && lineas[0].trim().startsWith("Escenario:")) {
+                                    escenariosEnArchivo.add(bloque.strip());
+                                }
+                            }
+                            return escenariosEnArchivo.stream();
                         } catch (IOException e) {
                             return Stream.empty();
                         }
