@@ -48,6 +48,36 @@ public class GherkinGenerator {
         }
     }
 
+    public static String leerEscenariosPorNombre(String carpeta, String nombreArchivoFeature) throws IOException {
+        try (Stream<Path> files = Files.walk(Paths.get(carpeta))) {
+            List<String> escenarios = files
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().equalsIgnoreCase(nombreArchivoFeature))
+                    .flatMap(p -> {
+                        try {
+                            String contenido = Files.readString(p);
+                            String[] bloques = contenido.split("(\r?\n){2,}");
+                            List<String> escenariosEnArchivo = new ArrayList<>();
+                            for (String bloque : bloques) {
+                                String[] lineas = bloque.strip().split("\\R");
+                                if (lineas.length >= 2 && lineas[0].trim().startsWith("@") && lineas[1].trim().startsWith("Escenario:")) {
+                                    escenariosEnArchivo.add(bloque.strip());
+                                } else if (lineas.length >= 1 && lineas[0].trim().startsWith("Escenario:")) {
+                                    escenariosEnArchivo.add(bloque.strip());
+                                }
+                            }
+                            return escenariosEnArchivo.stream();
+                        } catch (IOException e) {
+                            return Stream.empty();
+                        }
+                    })
+                    .limit(MAX_SCENARIOS)
+                    .collect(Collectors.toList());
+
+            return String.join("\n\n", escenarios);
+        }
+    }
+
     public static void guardarEscenario(String resultado) throws IOException {
         Path outputDir = Paths.get(DEFAULT_OUTPUT_FOLDER);
         Files.createDirectories(outputDir);

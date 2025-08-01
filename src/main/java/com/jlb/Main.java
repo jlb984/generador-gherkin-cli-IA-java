@@ -7,7 +7,7 @@ public class Main {
         Options options = new Options();
         options.addOption("f", "feature", true, "Ruta a carpeta con archivos .feature");
         options.addOption("d", "descripcion", true, "Descripción del nuevo caso de prueba");
-
+        options.addOption("n", "funcionalidad", true, "Nombre del archivo .feature a utilizar (ej: emision.feature)");
         options.addOption("p", "provider", true, "Proveedor de IA: openai (default) o gemini");
         options.addOption("h", "help", false, "Mostrar ayuda");
 
@@ -16,18 +16,17 @@ public class Main {
 
         try {
             CommandLine cmd = parser.parse(options, args);
-            if (cmd.hasOption("h") || !cmd.hasOption("f") || !cmd.hasOption("d")) {
+            if (cmd.hasOption("h") || !cmd.hasOption("f") || !cmd.hasOption("d") || !cmd.hasOption("n")) {
                 formatter.printHelp("gherkin-generator", options);
                 return;
             }
 
             String featureFolder = cmd.getOptionValue("feature");
             String descripcion = cmd.getOptionValue("descripcion");
-
+            String nombreFeature = cmd.getOptionValue("funcionalidad");
             String proveedor = cmd.getOptionValue("provider", "openai").toLowerCase();
 
-            String contexto = GherkinGenerator.leerUltimosEscenarios(featureFolder);
-
+            String contexto = GherkinGenerator.leerEscenariosPorNombre(featureFolder, nombreFeature);
 
             IAProvider ia;
             if (proveedor.equals("gemini")) {
