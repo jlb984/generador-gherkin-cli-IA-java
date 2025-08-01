@@ -1,14 +1,21 @@
 # Gherkin Generator CLI
 
-Herramienta de consola escrita en Java que utiliza la API de OpenAI para generar escenarios en lenguaje Gherkin basados en una descripción de caso de prueba y los escenarios existentes en tu proyecto.
+Herramienta de consola escrita en Java que utiliza la API de OpenAI o Gemini para generar escenarios en lenguaje Gherkin basados en una descripción de caso de prueba y los escenarios existentes en tu proyecto.
 
 ## ✅ Requisitos
+
+### 🔑 Cómo obtener tus claves de API
+
+* **OpenAI**: Iniciá sesión en [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys), hacé clic en “+ Create new secret key” y copiá la clave generada.
+
+* **Gemini (Google AI)**: Accedé a [https://makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey), generá una clave de API y guardala en un lugar seguro.
+
 
 * Java 17+
 * Maven 3+
 * Variables de entorno:
-    * `OPENAI_API_KEY` configurada con tu clave de OpenAI (si usás OpenAI)
-    * `GEMINI_API_KEY` configurada con tu clave de Gemini (si usás Gemini)
+  * `OPENAI_API_KEY` configurada con tu clave de OpenAI (si usás OpenAI)
+  * `GEMINI_API_KEY` configurada con tu clave de Gemini (si usás Gemini)
 
 ## 🔧 Instalación
 
@@ -39,13 +46,13 @@ mvn clean package
 Se generará el archivo:
 
 ```
-target/gherkin-generator-1.0-SNAPSHOT.jar
+target/gherkin-generator.jar
 ```
 
 ## ▶️ Uso
 
 ```bash
-java -jar target/gherkin-generator-0.1.0.jar ^
+java -jar target/gherkin-generator.jar ^
   --feature "<ruta/carpeta/features>" ^
   --funcionalidad "<archivo.feature>" ^
   --provider "<proveedor>" ^
@@ -64,7 +71,7 @@ Notas:
 ### Ejemplo
 
 ```bash
-java -jar target/gherkin-generator-0.1.0.jar \
+java -jar target/gherkin-generator.jar \
   --feature "src/test/resources/features" \
   --provider "openai" \
   --funcionalidad "emision.feature" \
