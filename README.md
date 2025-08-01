@@ -6,18 +6,28 @@ Herramienta de consola escrita en Java que utiliza la API de OpenAI para generar
 
 * Java 17+
 * Maven 3+
-* Variable de entorno `OPENAI_API_KEY` configurada con tu clave de OpenAI
+* Variables de entorno:
+    * `OPENAI_API_KEY` configurada con tu clave de OpenAI (si usás OpenAI)
+    * `GEMINI_API_KEY` configurada con tu clave de Gemini (si usás Gemini)
 
 ## 🔧 Instalación
 
 1. Clonar o copiar el proyecto.
 
-2. Configurar tu clave de OpenAI:
+2. Configurar tu clave de API según el proveedor:
 
 ```bash
-export OPENAI_API_KEY=sk-...  # en Linux/macOS
-set OPENAI_API_KEY=sk-...     # en Windows CMD
-$env:OPENAI_API_KEY = "sk-p"  # en PowerShell
+# Linux/macOS
+export OPENAI_API_KEY=sk-...
+export GEMINI_API_KEY=tu_clave_gemini
+
+# Windows CMD
+set OPENAI_API_KEY=sk-...
+set GEMINI_API_KEY=tu_clave_gemini
+
+# PowerShell
+$env:OPENAI_API_KEY = "sk-..."
+$env:GEMINI_API_KEY = "tu_clave_gemini"
 ```
 
 3. Compilar el proyecto:
@@ -35,13 +45,21 @@ target/gherkin-generator-1.0-SNAPSHOT.jar
 ## ▶️ Uso
 
 ```bash
-java -jar target/gherkin-generator-0.1.0.jar \
-  --feature "<ruta/carpeta/features>" \
-  --funcionalidad "<archivo.feature>" \
-  --provider "<proveedor>" \ 
+java -jar target/gherkin-generator-0.1.0.jar ^
+  --feature "<ruta/carpeta/features>" ^
+  --funcionalidad "<archivo.feature>" ^
+  --provider "<proveedor>" ^
   --descripcion "<descripcion del nuevo caso de prueba>"
 ```
-Nota: La opción `--provider` es opcional y por defecto usa "openai". Opciones válidas: `openai`, `gemini`.
+
+> ⚠️ Formato de comandos multilínea:
+> * Bash / Linux / macOS: usar `\`
+> * CMD (Windows): usar `^`
+> * PowerShell: usar `\` o una línea continua sin símbolo
+
+Notas:
+* La opción `--provider` es opcional y por defecto usa "openai". Opciones válidas: `openai`, `gemini`.
+* La opción `--funcionalidad` también es opcional. Si no se indica, se tomarán los últimos escenarios de cualquier archivo `.feature` encontrado en la carpeta indicada.
 
 ### Ejemplo
 
@@ -58,7 +76,7 @@ java -jar target/gherkin-generator-0.1.0.jar \
 * Busca archivos `.feature` con el nombre indicado (ej. `emision.feature`) dentro de subcarpetas.
 * Lee hasta 10 escenarios desde esos archivos.
 * Si no se especifica `--funcionalidad`, lee los últimos escenarios encontrados.
-* Envía esos escenarios junto con una nueva descripción a la API de OpenAI.
+* Envía esos escenarios junto con una nueva descripción a la API de OpenAI o Gemini.
 * Recibe un escenario Gherkin generado por IA.
 * Imprime el resultado en consola.
 * Guarda automáticamente el escenario generado en la carpeta:
