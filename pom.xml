@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jlb</groupId>
-    <artifactId>cli-gherkin-generator</artifactId>
+    <artifactId>cli-gherkin-generator-AI</artifactId>
     <version>0.1.0</version>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -25,6 +25,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>gherkin-generator</finalName> <!-- Este será el nombre del JAR sin versión -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
