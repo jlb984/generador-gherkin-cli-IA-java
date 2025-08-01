@@ -3,7 +3,7 @@
 @login @regresion
 Característica: Login de usuario
 
-  @login @regresion @succes
+  @login @regresion @success
   Escenario: Iniciar sesión con credenciales válidas
     Dado que el usuario está en la página de inicio de sesión
     Cuando el usuario ingresa su nombre de usuario y contraseña válidos

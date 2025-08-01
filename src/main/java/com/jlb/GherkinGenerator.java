@@ -95,7 +95,7 @@ public class GherkinGenerator {
         Files.createDirectories(outputDir);
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         Path path = outputDir.resolve("escenario_generado_" + timestamp + ".feature");
-        try (PrintWriter writer = new PrintWriter(path.toFile())) {
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(Files.newOutputStream(path), StandardCharsets.UTF_8))) {
             writer.println(resultado);
         }
         System.out.println("Escenario guardado en: " + path);
