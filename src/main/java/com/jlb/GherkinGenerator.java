@@ -49,6 +49,9 @@ public class GherkinGenerator {
     }
 
     public static String leerEscenariosPorNombre(String carpeta, String nombreArchivoFeature) throws IOException {
+        if (nombreArchivoFeature == null || nombreArchivoFeature.isEmpty()) {
+            return leerUltimosEscenarios(carpeta);
+        }
         try (Stream<Path> files = Files.walk(Paths.get(carpeta))) {
             List<String> escenarios = files
                     .filter(Files::isRegularFile)
