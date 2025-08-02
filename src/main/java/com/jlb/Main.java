@@ -31,12 +31,7 @@ public class Main {
             String provider = cmd.getOptionValue("provider", "openai");
             boolean debug = cmd.hasOption("debug");
 
-            String contexto;
-            if (nombreFeature != null) {
-                contexto = GherkinGenerator.leerEscenariosPorNombre(featureFolder, nombreFeature);
-            } else {
-                contexto = GherkinGenerator.leerUltimosEscenarios(featureFolder);
-            }
+            String contexto = GherkinGenerator.leerEscenariosPorNombre(featureFolder, nombreFeature);
 
             if (debug) {
                 System.out.println("[DEBUG] Contexto de escenarios existentes:\n");
